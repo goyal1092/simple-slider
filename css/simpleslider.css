@@ -1,0 +1,11 @@
+.slider-container{
+	box-shadow: 0px 5px 20px 0px;
+	border-radius: 5px; 
+}
+.slider ul{
+	width: 10000px;
+	list-style: none;
+}
+.slider ul li{
+	float: left;
+}
