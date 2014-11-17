@@ -22,7 +22,7 @@
 		//border radius
 		borderRadius: '4px',
 
-		// sets visibility of rail
+		// sets slide speed for autorun        
 		slideSpeed: 5000,
 
 	};
