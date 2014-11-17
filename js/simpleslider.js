@@ -25,6 +25,10 @@
 		// sets visibility of rail
 		slideSpeed: 5000,
 
+		// Display carousel indicator
+
+		carouselIndicator: true,
+
 	};
 
 	$.fn.simpleSlider = function (suppliedsettings, option){
@@ -43,7 +47,7 @@
 			}
 
 			var divS = '<div></div>',timeout,
-			current = 0;
+			current = 0, ulS = '<ul></ul>';
 			$this.css({
 				height: settings.height,
 				width: settings.width,
@@ -78,6 +82,20 @@
 				zIndex: 99,
 				right: '23%',
 			}).data('dir', 'next').html('>');
+
+			if(settings.carouselIndicator){
+				
+				var crouselWrapper = $(ulS).addClass('crousel-ul').css({
+					'padding': '10px 0',
+					'list-style': 'none',
+					position: 'absolute',
+					width: $this.width(),
+					background: 'rgba(0, 0, 0, 0.16)',
+					'border-top': '1px solid rgba(0, 0, 0, 0.07)',
+					top: $this.offset()['top']-32 + $this.height() + 'px',
+				});
+				createIndicators(imgLen);
+			}
 
 			if(settings.buttonVisible){
 				$this.append(button_prev);
@@ -121,6 +139,18 @@
 				}
 			});
 
+			$this.find('.clouser-li').on('click', function(){
+				current = $(this).data('number');
+				
+				transition();
+				if(settings.autorun) {
+					clearTimeout(timeout);
+					autorun();
+				}
+				$(this).siblings().removeClass('clouser-li-active');
+				$(this).addClass('clouser-li-active');
+			});
+
 			function autorun(){
 				timeout = setInterval(function(){   
 					 setCurrent('next');
@@ -129,19 +159,30 @@
 
 			function setCurrent(dir){
 				var pos = current;
-				console.log(pos);
-				console.log(imgLen);
-				console.log(pos % imgLen);
 				pos+= (~~(dir === 'next') || -1);
-				console.log(pos);
 				current = (pos < 0 ) ? imgLen -1 : pos % imgLen;
 				transition();
 			}
 
 			function transition(coords){
-			sliderUl.animate({
-				'margin-left': coords || -(current * imgWidth)
-			});
+				sliderUl.animate({
+					'margin-left': coords || -(current * imgWidth)
+				});
+				if(settings.carouselIndicator){
+					var liS = '<li></li>';
+					console.log('running');
+
+					console.log($this.find('.clouser-li').data('number'));
+				}
+			}
+
+			function createIndicators(total){
+				for(i=0 ; i < total; i++){
+					var liS = '<li></li>';
+					var new_li = $(liS).addClass('clouser-li').data('number', i);
+					crouselWrapper.append(new_li);
+				}
+				$this.append(crouselWrapper);
 			}
 		});
 	}
